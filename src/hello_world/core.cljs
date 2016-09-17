@@ -21,8 +21,14 @@ ahead and edit it and see reloading in action.")
     " text."]])
 
 (defn timer-component []
+  ;; This state atom is reset on every reload, also by figwheel:
   (let [seconds-elapsed (r/atom 0)]
+    ;; A component does not need to return plain hiccup data. The
+    ;; component is a function itself and may also return another
+    ;; function that returns such data:
     (fn []
+      ;; A change of my local atom will trigger re-rendering of this
+      ;; component:
       (js/setTimeout #(swap! seconds-elapsed inc) 1000)
       [:div
        [:h3 "I am component 2!"]
@@ -31,7 +37,12 @@ ahead and edit it and see reloading in action.")
 (defn stateful-component []
   [:div
    [:h3 "I am a stateful component!"]
-   [:p.someclass (:text @app-state)]])
+   [:p.someclass
+    {:on-click #(swap! app-state
+                       (fn [s]
+                         (let [txt (:text s)]
+                           (assoc s :text (str txt " Hello?")))))}
+    (:text @app-state)]])
 
 (defn app []
   [:div
