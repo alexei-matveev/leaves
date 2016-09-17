@@ -53,11 +53,10 @@ ahead and edit it and see reloading in action.")
    [timer-component]
    [stateful-component]])
 
-(defn on-js-reload []
-  ;; optionally touch your app-state to force rerendering depending on
-  ;; your application
-  ;; (swap! app-state update-in [:__figwheel_counter] inc)
-  )
+;; Optionally touch your app-state to force rerendering depending on
+;; your application
+#_(defn on-js-reload []
+  (swap! app-state update-in [:__figwheel_counter] inc))
 
 ;; React would warn about using of (.-body js/document) here, and
 ;; advise using specific element:
