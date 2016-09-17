@@ -46,7 +46,7 @@ ahead and edit it and see reloading in action.")
 
 (defn app []
   [:div
-   [:h2 "I am supercomponent!"]
+   [:h2 "I am a supercomponent!"]
    [some-component]
    [timer-component]
    [stateful-component]])
@@ -57,5 +57,7 @@ ahead and edit it and see reloading in action.")
   ;; (swap! app-state update-in [:__figwheel_counter] inc)
   )
 
+;; React would warn about using of (.-body js/document) here, and
+;; advise using specific element:
 (r/render-component [app]
-                    (.-body js/document))
+                    (js/document.getElementById "app"))
