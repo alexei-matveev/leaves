@@ -7,7 +7,9 @@
 (println "This text is printed from src/hello-world/core.cljs. Go
 ahead and edit it and see reloading in action.")
 
-(js/console.log "Log message")
+;; Both seem to be used in the wild:
+(js/console.log "Log message one way")
+(.log js/console "Log message another way")
 
 ;; Define your app data so that it doesn't get over-written on reload
 (defonce app-state (r/atom {:text "Hello world!"}))
