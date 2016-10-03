@@ -31,6 +31,8 @@
               ;; position, do the latter
               (-> map
                   (.on "viewreset" (.-x-reset this) this))
+              (-> map
+                  (.on "zoomend" (.-x-reset this) this))
               (.x-reset this))))
 
         :onRemove

@@ -37,7 +37,8 @@ ahead and edit it and see reloading in action.")
       ;; component. FIXME: and install another ticker!
       (js/setTimeout #(swap! seconds-elapsed inc) 1000)
       [:div>p
-       {:on-click #(swap! seconds-elapsed (constantly -1))}
+       {:style {:margin 0}
+        :on-click #(swap! seconds-elapsed (constantly -1))}
        "Timer-" @seconds-elapsed])))
 
 (defn stateful-component []
