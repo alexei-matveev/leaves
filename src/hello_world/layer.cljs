@@ -7,18 +7,18 @@
           ;; save position of the layer or any options from the
           ;; constructor
           (this-as this
-            (set! (.-_latlng this) latlng)
+            (set! (.-x-latlng this) latlng)
             this))
 
         :onAdd
         (fn [map]
           (this-as this
-            (set! (.-_map this) map)
+            (set! (.-x-map this) map)
             ;; create a DOM element and put it into one of the map
             ;; panes
             (let [el (js/L.DomUtil.create "div"
                                           "my-custom-layer leaflet-zoom-hide")]
-              (set! (.-_el this) el)
+              (set! (.-x-el this) el)
               ;; The id is referred to in the react component:
               (set! (.-id el) "my-layer-id")
               (js/console.log "MyCustomLayer: element created")
@@ -39,18 +39,19 @@
             (-> map
                 .getPanes
                 .overlayPane
-                (.removeChild (.-_el this)))
+                (.removeChild (.-x-el this)))
             (-> map
                 (.off "viewreset" (.-_reset this) this))))
 
+        ;; For some reason I cannot rename this prop without breakage:
         :_reset
         (fn []
           ;; update layer's position
           (this-as this
             (let [pos (-> this
-                          .-_map
-                          (.latLngToLayerPoint (.-_latlng this)))]
-              (js/L.DomUtil.setPosition (.-_el this) pos))))}))
+                          .-x-map
+                          (.latLngToLayerPoint (.-x-latlng this)))]
+              (js/L.DomUtil.setPosition (.-x-el this) pos))))}))
 
 ;; map.addLayer(new MyCustomLayer(latlng));
 
