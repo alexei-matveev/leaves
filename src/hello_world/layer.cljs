@@ -23,8 +23,8 @@
               (set! (.-id el) "my-layer-id")
               (js/console.log "MyCustomLayer: element created")
               (-> map
-                  (.getPanes)
-                  (.-overlayPane)
+                  .getPanes
+                  .-overlayPane
                   (.appendChild el))
               ;; add a viewreset event listener for updating layer's
               ;; position, do the latter
@@ -37,8 +37,8 @@
           ;; remove layer's DOM elements and listeners
           (this-as this
             (-> map
-                (.getPanes)
-                (.overlayPane)
+                .getPanes
+                .overlayPane
                 (.removeChild (.-_el this)))
             (-> map
                 (.off "viewreset" (.-_reset this) this))))
@@ -48,7 +48,7 @@
           ;; update layer's position
           (this-as this
             (let [pos (-> this
-                          (.-_map)
+                          .-_map
                           (.latLngToLayerPoint (.-_latlng this)))]
               (js/L.DomUtil.setPosition (.-_el this) pos))))}))
 
