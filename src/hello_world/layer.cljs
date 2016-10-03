@@ -2,7 +2,7 @@
 
 ;; This is an ugly way to build a js class:
 (def MyCustomLayer
-  (js/L.Class.extend
+  (js/L.Layer.extend
    #js {:initialize
         (fn [latlng]
           ;; save position of the layer or any options from the
