@@ -49,15 +49,21 @@ ahead and edit it and see reloading in action.")
                            (assoc s :text (str txt " Hello?")))))}
     (:text @app-state)]])
 
+;;
+;; Leaflet component:
+;;
 (defn leaflet-render []
   [:div#map {:style {:height "360px"}}])
 
 (defn leaflet-did-mount []
-  (let [map (.setView (.map js/L "map") #js [51.505 -0.09] 13)]
-    (.addTo (.tileLayer js/L "http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                        (clj->js {:attribution "Map data © <a href=\"http://openstreetmap.org\">OpenStreetMap</a> contributors"
-                                  :maxZoom 18}))
-            map)))
+  (let [tiles "http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        attribution "Map data © <a href=\"http://openstreetmap.org\">OpenStreetMap</a> contributors"
+        map (.setView (.map js/L "map") #js [51.505 -0.09] 13)]
+    (.addTo (.tileLayer js/L tiles #js {:attribution attribution
+                                        :maxZoom 18})
+            map)
+    (println "adding custom layer")
+    (.addLayer map (js/MyCustomLayer. #js [51.505 -0.09]))))
 
 (defn leaflet []
   (r/create-class {:reagent-render leaflet-render
@@ -82,3 +88,7 @@ ahead and edit it and see reloading in action.")
 (r/render-component
  [leaflet]
  (js/document.getElementById "app"))
+
+(r/render-component
+ [timer-component]
+ (js/document.getElementById "my-layer-id"))
