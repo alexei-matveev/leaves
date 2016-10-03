@@ -1,5 +1,6 @@
 (ns hello-world.core
   (:require [reagent.core :as r]
+            [hello-world.layer :as layer]
             [cljsjs.react-bootstrap :as b]))
 
 ;; Enable output of println and co to the js console:
@@ -35,9 +36,7 @@ ahead and edit it and see reloading in action.")
       ;; A change of my local atom will trigger re-rendering of this
       ;; component:
       (js/setTimeout #(swap! seconds-elapsed inc) 1000)
-      [:div
-       [:h3 "I am component number two!"]
-       [:p.someclass  "Seconds Elapsed: " @seconds-elapsed]])))
+      [:div>p "Timer-" @seconds-elapsed])))
 
 (defn stateful-component []
   [:div
@@ -63,7 +62,7 @@ ahead and edit it and see reloading in action.")
                                         :maxZoom 18})
             map)
     (println "adding custom layer")
-    (.addLayer map (js/MyCustomLayer. #js [51.505 -0.09]))))
+    (.addLayer map (layer/MyCustomLayer. #js [51.505 -0.09]))))
 
 (defn leaflet []
   (r/create-class {:reagent-render leaflet-render
@@ -89,6 +88,9 @@ ahead and edit it and see reloading in action.")
  [leaflet]
  (js/document.getElementById "app"))
 
+;; The element id is set in the constructor of the custom layer:
 (r/render-component
  [timer-component]
  (js/document.getElementById "my-layer-id"))
+
+(println layer/MyCustomLayer)
