@@ -29,8 +29,8 @@
               ;; add a viewreset event listener for updating layer's
               ;; position, do the latter
               (-> map
-                  (.on "viewreset" (.-_reset this) this))
-              (._reset this))))
+                  (.on "viewreset" (.-x-reset this) this))
+              (.x-reset this))))
 
         :onRemove
         (fn [map]
@@ -41,10 +41,10 @@
                 .overlayPane
                 (.removeChild (.-x-el this)))
             (-> map
-                (.off "viewreset" (.-_reset this) this))))
+                (.off "viewreset" (.-x-reset this) this))))
 
-        ;; For some reason I cannot rename this prop without breakage:
-        :_reset
+        ;; Clojurescipt converts dashes in the name to underscores:
+        :x_reset
         (fn []
           ;; update layer's position
           (this-as this
