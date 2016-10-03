@@ -34,9 +34,11 @@ ahead and edit it and see reloading in action.")
     ;; function that returns such data:
     (fn []
       ;; A change of my local atom will trigger re-rendering of this
-      ;; component:
+      ;; component. FIXME: and install another ticker!
       (js/setTimeout #(swap! seconds-elapsed inc) 1000)
-      [:div>p "Timer-" @seconds-elapsed])))
+      [:div>p
+       {:on-click #(swap! seconds-elapsed (constantly -1))}
+       "Timer-" @seconds-elapsed])))
 
 (defn stateful-component []
   [:div

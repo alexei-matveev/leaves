@@ -1,5 +1,6 @@
 (ns hello-world.layer)
 
+;; This is an ugly way to build a js class:
 (def MyCustomLayer
   (js/L.Class.extend
    #js {:initialize
