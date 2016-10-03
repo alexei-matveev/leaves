@@ -1,5 +1,6 @@
 (ns hello-world.core
-  (:require [reagent.core :as r]))
+  (:require [reagent.core :as r]
+            [cljsjs.react-bootstrap :as b]))
 
 ;; Enable output of println and co to the js console:
 (enable-console-print!)
@@ -14,9 +15,11 @@ ahead and edit it and see reloading in action.")
 ;; Define your app data so that it doesn't get over-written on reload
 (defonce app-state (r/atom {:text "Hello world!"}))
 
+(def button (r/adapt-react-class (aget js/ReactBootstrap "Button")))
+
 (defn some-component []
   [:div
-   [:h3 "I am component 1!"]
+   [:h3 "I am component number one!"]
    [:p.someclass
     "I have " [:strong "bold"]
     [:span {:style {:color "blue"}} " and blue"]
@@ -33,7 +36,7 @@ ahead and edit it and see reloading in action.")
       ;; component:
       (js/setTimeout #(swap! seconds-elapsed inc) 1000)
       [:div
-       [:h3 "I am component 2!"]
+       [:h3 "I am component number two!"]
        [:p.someclass  "Seconds Elapsed: " @seconds-elapsed]])))
 
 (defn stateful-component []
@@ -46,19 +49,36 @@ ahead and edit it and see reloading in action.")
                            (assoc s :text (str txt " Hello?")))))}
     (:text @app-state)]])
 
+(defn leaflet-render []
+  [:div#map {:style {:height "360px"}}])
+
+(defn leaflet-did-mount []
+  (let [map (.setView (.map js/L "map") #js [51.505 -0.09] 13)]
+    (.addTo (.tileLayer js/L "http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                        (clj->js {:attribution "Map data © <a href=\"http://openstreetmap.org\">OpenStreetMap</a> contributors"
+                                  :maxZoom 18}))
+            map)))
+
+(defn leaflet []
+  (r/create-class {:reagent-render leaflet-render
+                   :component-did-mount leaflet-did-mount}))
+
 (defn app []
   [:div
    [:h2 "I am a supercomponent!"]
    [some-component]
    [timer-component]
+   [button "with text"]
    [stateful-component]])
 
 ;; Optionally touch your app-state to force rerendering depending on
 ;; your application
-#_(defn on-js-reload []
+#_(defn on-js-reload
+  []
   (swap! app-state update-in [:__figwheel_counter] inc))
 
 ;; React would warn about using of (.-body js/document) here, and
 ;; advise using specific element:
-(r/render-component [app]
-                    (js/document.getElementById "app"))
+(r/render-component
+ [leaflet]
+ (js/document.getElementById "app"))
