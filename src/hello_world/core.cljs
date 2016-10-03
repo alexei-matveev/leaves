@@ -41,6 +41,16 @@ ahead and edit it and see reloading in action.")
         :on-click #(swap! seconds-elapsed (constantly -1))}
        "Timer-" @seconds-elapsed])))
 
+(defn svg-component
+  [d]
+  (let [r (/ d 2)]
+    [:div {:style {:margin-top (- r), :margin-left (- r)}}
+     [:svg {:width d
+            :height d
+            :id "svg-component"
+            :style {:background-color "#fff0"}}
+      [:circle {:cx r, :cy r, :r r, :style {:fill "red"}}]]]))
+
 (defn stateful-component []
   [:div
    [:h3 "I am a stateful component!"]
@@ -93,7 +103,7 @@ ahead and edit it and see reloading in action.")
 
 ;; The element id is set in the constructor of the custom layer:
 (r/render-component
- [timer-component]
+ [svg-component 40]
  (js/document.getElementById "my-layer-id"))
 
 (println layer/MyCustomLayer)
