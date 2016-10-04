@@ -73,13 +73,14 @@ ahead and edit it and see reloading in action.")
 
 (defn- svg-component []
   [:div
-   [svg-marker -80 0 80 "black"]
-   [svg-marker 0 0 20 "red"]])
+   (for [x (range -300 300 50)]
+     (for [y (range -300 300 50)]
+       [svg-marker x y 20 "red"]))])
 ;;
 ;; Leaflet component handlers:
 ;;
 (defn leaflet-render []
-  [:div#map-id {:style {:height "360px"}}])
+  [:div#map-id {:style {:height "600px"}}])
 
 (defn leaflet-did-mount []
   (let [tile-url "http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
