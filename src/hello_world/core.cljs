@@ -58,7 +58,7 @@ ahead and edit it and see reloading in action.")
 (defn- svg-marker [x y d color]
   (let [r (/ d 2)
         ;; primary and alternative colors:
-        state (r/atom [color "white"])]
+        state (r/atom [color "black"])]
     (fn []
       [:div {:style {:margin 0
                      ;; :margin-top (- r), :margin-left (- r),
