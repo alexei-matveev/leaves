@@ -41,16 +41,6 @@ ahead and edit it and see reloading in action.")
         :on-click #(swap! seconds-elapsed (constantly -1))}
        "Timer-" @seconds-elapsed])))
 
-(defn svg-component
-  [d]
-  (let [r (/ d 2)]
-    [:div {:style {:margin-top (- r), :margin-left (- r)}}
-     [:svg {:width d
-            :height d
-            :id "svg-component"
-            :style {:background-color "#fff0"}}
-      [:circle {:cx r, :cy r, :r r, :style {:fill "red"}}]]]))
-
 (defn stateful-component []
   [:div
    [:h3 "I am a stateful component!"]
@@ -61,6 +51,25 @@ ahead and edit it and see reloading in action.")
                            (assoc s :text (str txt " Hello?")))))}
     (:text @app-state)]])
 
+;; This may be browser dependent:
+(defn- translate [x y]
+  (str "translate3d(" x "px," y "px, 0px)"))
+
+(defn- svg-marker [x y d color]
+  (let [r (/ d 2)]
+    [:div {:style {:margin 0
+                   ;; :margin-top (- r), :margin-left (- r),
+                   :transform (translate (- x r) (- y r))}}
+     [:svg {:width d
+            :height d
+            :id "svg-marker"
+            :style {:background-color "#fff0"}}
+      [:circle {:cx r, :cy r, :r r, :style {:fill color}}]]]))
+
+(defn- svg-component []
+  [:div
+   [svg-marker -80 0 80 "black"]
+   [svg-marker 0 0 20 "red"]])
 ;;
 ;; Leaflet component handlers:
 ;;
@@ -113,7 +122,7 @@ ahead and edit it and see reloading in action.")
 
 ;; The element id is set in the constructor of the custom layer:
 (r/render-component
- [svg-component 40]
+ [svg-component]
  (js/document.getElementById "my-layer-id"))
 
 (println layer/MyCustomLayer)
