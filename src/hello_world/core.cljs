@@ -56,15 +56,20 @@ ahead and edit it and see reloading in action.")
   (str "translate3d(" x "px," y "px, 0px)"))
 
 (defn- svg-marker [x y d color]
-  (let [r (/ d 2)]
-    [:div {:style {:margin 0
-                   ;; :margin-top (- r), :margin-left (- r),
-                   :transform (translate (- x r) (- y r))}}
-     [:svg {:width d
-            :height d
-            :id "svg-marker"
-            :style {:background-color "#fff0"}}
-      [:circle {:cx r, :cy r, :r r, :style {:fill color}}]]]))
+  (let [r (/ d 2)
+        ;; primary and alternative colors:
+        state (r/atom [color "white"])]
+    (fn []
+      [:div {:style {:margin 0
+                     ;; :margin-top (- r), :margin-left (- r),
+                     :transform (translate (- x r) (- y r))}
+             ;; swap active and alternative colors:
+             :on-click #(swap! state (fn [[a b]] [b a]))}
+       [:svg {:width d
+              :height d
+              :id "svg-marker"
+              :style {:background-color "#fff0"}}
+        [:circle {:cx r, :cy r, :r r, :style {:fill (first @state)}}]]])))
 
 (defn- svg-component []
   [:div
