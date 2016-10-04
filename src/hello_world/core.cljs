@@ -65,17 +65,24 @@ ahead and edit it and see reloading in action.")
 ;; Leaflet component:
 ;;
 (defn leaflet-render []
-  [:div#map {:style {:height "360px"}}])
+  [:div#map-id {:style {:height "360px"}}])
 
 (defn leaflet-did-mount []
-  (let [tiles "http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        attribution "Map data © <a href=\"http://openstreetmap.org\">OpenStreetMap</a> contributors"
-        map (.setView (.map js/L "map") #js [51.505 -0.09] 13)]
-    (.addTo (.tileLayer js/L tiles #js {:attribution attribution
+  (let [tile-url "http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        attribution "Map data © <a href=\"http://openstreetmap.org\">OSM</a> contributors"
+        tile-layer (js/L.tileLayer tile-url
+                                   #js {:attribution attribution
                                         :maxZoom 18})
-            map)
-    (println "adding custom layer")
-    (.addLayer map (layer/MyCustomLayer. #js [51.505 -0.09]))))
+        ;; center #js [51.505 -0.09]       ; London
+        center #js [48.1351 11.5820]    ; Munich
+        map (-> (js/L.map "map-id")
+                (.setView center 13))
+        ;; Custom layer is so simple so far, that it takes only one
+        ;; coordinate pair:
+        custom-layer (layer/MyCustomLayer. center)]
+    (doto map
+      (.addLayer tile-layer)
+      (.addLayer custom-layer))))
 
 (defn leaflet []
   (r/create-class {:reagent-render leaflet-render
