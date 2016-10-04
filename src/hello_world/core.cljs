@@ -62,7 +62,7 @@ ahead and edit it and see reloading in action.")
     (:text @app-state)]])
 
 ;;
-;; Leaflet component:
+;; Leaflet component handlers:
 ;;
 (defn leaflet-render []
   [:div#map-id {:style {:height "360px"}}])
@@ -84,6 +84,9 @@ ahead and edit it and see reloading in action.")
       (.addLayer tile-layer)
       (.addLayer custom-layer))))
 
+;;
+;; Leaflet component itself:
+;;
 (defn leaflet []
   (r/create-class {:reagent-render leaflet-render
                    :component-did-mount leaflet-did-mount}))
