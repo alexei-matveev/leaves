@@ -6,7 +6,7 @@
 ;;
 ;; [1] http://leafletjs.com/reference.html
 ;;
-(ns hello-world.layer)
+(ns leaves.layer)
 
 ;; This is an ugly way to extend a js class:
 (def MyCustomLayer

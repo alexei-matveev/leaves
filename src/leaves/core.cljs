@@ -1,12 +1,12 @@
-(ns hello-world.core
+(ns leaves.core
   (:require [reagent.core :as r]
-            [hello-world.layer :as layer]
+            [leaves.layer :as layer]
             [cljsjs.react-bootstrap :as b]))
 
 ;; Enable output of println and co to the js console:
 (enable-console-print!)
 
-(println "This text is printed from src/hello-world/core.cljs. Go
+(println "This text is printed from src/leaves/core.cljs. Go
 ahead and edit it and see reloading in action.")
 
 ;; Both seem to be used in the wild:

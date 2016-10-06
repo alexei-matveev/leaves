@@ -1,4 +1,4 @@
-(defproject hello-world "0.1.0-SNAPSHOT"
+(defproject leaves "0.1.0-SNAPSHOT"
   :description "FIXME: write this!"
   :url "http://example.com/FIXME"
   :license {:name "Eclipse Public License"
@@ -27,16 +27,16 @@
                 ;; the presence of a :figwheel configuration here
                 ;; will cause figwheel to inject the figwheel client
                 ;; into your build
-                :figwheel {:on-jsload "hello-world.core/on-js-reload"
+                :figwheel {:on-jsload "leaves.core/on-js-reload"
                            ;; :open-urls will pop open your application
                            ;; in the default browser once Figwheel has
                            ;; started and complied your application.
                            ;; Comment this out once it no longer serves you.
                            :open-urls ["http://localhost:3449/index.html"]}
 
-                :compiler {:main hello-world.core
+                :compiler {:main leaves.core
                            :asset-path "js/compiled/out"
-                           :output-to "resources/public/js/compiled/hello_world.js"
+                           :output-to "resources/public/js/compiled/leaves.js"
                            :output-dir "resources/public/js/compiled/out"
                            :source-map-timestamp true
                            ;; To console.log CLJS data-structures make sure you enable devtools in Chrome
@@ -47,8 +47,8 @@
                ;; lein cljsbuild once min
                {:id "min"
                 :source-paths ["src"]
-                :compiler {:output-to "resources/public/js/compiled/hello_world.js"
-                           :main hello-world.core
+                :compiler {:output-to "resources/public/js/compiled/leaves.js"
+                           :main leaves.core
                            :optimizations :advanced
                            :pretty-print false}}]}
 
@@ -67,7 +67,7 @@
 
              ;; doesn't work for you just run your own server :) (see lein-ring)
 
-             ;; :ring-handler hello_world.server/handler
+             ;; :ring-handler leaves.server/handler
 
              ;; To be able to open files in your editor from the heads up display
              ;; you will need to put a script on your path.
