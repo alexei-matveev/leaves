@@ -43,7 +43,7 @@
             ;; create a DOM element and put it into one of the map
             ;; panes
             (let [el (js/L.DomUtil.create "div"
-                                          "my-custom-layer leaflet-zoom-hide")
+                                          "leaflet-zoom-hide")
                   ;; We will  need a function to  transform geographic
                   ;; coordinates into plain pixels.  The input and the
                   ;; output are cljs 2-vectors here:
