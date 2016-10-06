@@ -30,8 +30,9 @@
   (js/L.Layer.extend
    #js {:initialize
         (fn [points]
-          ;; save position of the layer or any options from the
-          ;; constructor
+          ;; Constructor.  Save the  atom holding  coordinates of  the
+          ;; layer points.  We wil need  to update them on some events
+          ;; later.
           (this-as this
             (println {:state @points})
             (set! (.-x-points this) points)))
@@ -40,7 +41,7 @@
         (fn [map]
           (this-as this
             (set! (.-x-map this) map)
-            ;; create a DOM element and put it into one of the map
+            ;; Create a DOM element and put it into one of the map
             ;; panes
             (let [el (js/L.DomUtil.create "div"
                                           "leaflet-zoom-hide")
@@ -51,16 +52,20 @@
                            (let [ll (clj->js p)
                                  xy (.latLngToLayerPoint map ll)]
                              [(.-x xy) (.-y xy)]))]
+              ;; It probably need  to be nested here in  order to move
+              ;; together with the tiles when dragging the map around:
               (set! (.-x-el this) el)
-              ;; The id is referred to in the react component:
+              ;; The id is referred to  in the react component. FIXME:
+              ;; literal is a bad idea:
               (set! (.-id el) "my-layer-id")
               (js/console.log "MyCustomLayer: element created")
               (-> map
                   .getPanes
                   .-overlayPane
                   (.appendChild el))
-              ;; add a viewreset event listener for updating layer's
-              ;; position, do the latter
+              ;; Add  a viewreset  event listener  for updating  pixel
+              ;; coordinates of layer points and do that for the first
+              ;; time too:
               (let [points (.-x-points this)
                     callback #(update-xy points ll->xy)]
                 (doto map
@@ -70,7 +75,7 @@
 
         :onRemove
         (fn [map]
-          ;; remove layer's DOM elements and listeners
+          ;; Remove layer's DOM elements and listeners
           (this-as this
             (-> map
                 .getPanes
@@ -82,7 +87,5 @@
             (doto map
               (.off "viewreset")
               (.off "zoomend"))))}))
-
-;; (println {:my-custom-layer MyCustomLayer})
 
 
