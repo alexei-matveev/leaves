@@ -12,11 +12,12 @@
 (def MyCustomLayer
   (js/L.Layer.extend
    #js {:initialize
-        (fn [latlng]
+        (fn [points]
           ;; save position of the layer or any options from the
           ;; constructor
           (this-as this
-            (set! (.-x-latlng this) latlng)))
+            (println {:state @points})
+            (set! (.-x-points this) points)))
 
         :onAdd
         (fn [map]
@@ -58,10 +59,18 @@
         (fn []
           ;; update layer's position
           (this-as this
-            (let [pos (-> this
-                          .-x-map
-                          (.latLngToLayerPoint (.-x-latlng this)))]
-              (js/L.DomUtil.setPosition (.-x-el this) pos))))}))
+            (let [points (.-x-points this)
+                  ll (:ll @points)
+                  f (fn [p]
+                      (let [ll (clj->js p)
+                            xy (-> this
+                                   .-x-map
+                                   (.latLngToLayerPoint ll))]
+                        [(.-x xy) (.-y xy)]))
+                  xy (for [p ll]
+                       (f p))]
+              (println {:ll ll :xy xy})
+              (swap! points #(assoc % :xy xy)))))}))
 
 ;; (println {:my-custom-layer MyCustomLayer})
 

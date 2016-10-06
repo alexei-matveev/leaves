@@ -56,26 +56,34 @@ ahead and edit it and see reloading in action.")
   (str "translate3d(" x "px," y "px, 0px)"))
 
 (defn- svg-marker [x y d color]
-  (let [r (/ d 2)
-        ;; primary and alternative colors:
-        state (r/atom [color "black"])]
-    (fn []
-      [:div {:style {:margin 0
-                     ;; :margin-top (- r), :margin-left (- r),
-                     :transform (translate (- x r) (- y r))}
-             ;; swap active and alternative colors:
-             :on-click #(swap! state (fn [[a b]] [b a]))}
-       [:svg {:width d
-              :height d
-              :id "svg-marker"
-              :style {:background-color "#fff0"}}
-        [:circle {:cx r, :cy r, :r r, :style {:fill (first @state)}}]]])))
+  (let [r (/ d 2)]
+    [:div {:style {:margin 0
+                   ;; :margin-top (- r), :margin-left (- r),
+                   :transform (translate (- x r) (- y r))}}
+     [:svg {:width d
+            :height d
+            :id "svg-marker"
+            :style {:background-color "#fff0"}}
+      [:circle {:cx r, :cy r, :r r, :style {:fill color}}]]]))
 
 (defn- svg-component []
   [:div
    (for [x (range -300 300 50)]
      (for [y (range -300 300 50)]
        [svg-marker x y 20 "red"]))])
+
+(def points (r/atom {:ll [[48.1351 11.5820]
+                          [48.1451 11.5820]
+                          [51.505 -0.09]]
+                     :xy nil}))
+(println {:atom @points})
+
+(defn- leaves []
+  (let [xy (:xy @points)]
+    (println {:leaves @points})
+    [:div
+     (for [[i [x y]] (map-indexed vector xy)]
+       ^{:key i} [svg-marker x y 20 "red"])]))
 ;;
 ;; Leaflet component handlers:
 ;;
@@ -94,7 +102,7 @@ ahead and edit it and see reloading in action.")
                 (.setView center 13))
         ;; Custom layer is so simple so far, that it takes only one
         ;; coordinate pair:
-        custom-layer (layer/MyCustomLayer. center)]
+        custom-layer (layer/MyCustomLayer. points)]
     (doto map
       (.addLayer tile-layer)
       (.addLayer custom-layer))))
@@ -128,7 +136,8 @@ ahead and edit it and see reloading in action.")
 
 ;; The element id is set in the constructor of the custom layer:
 (r/render-component
- [svg-component]
+ [leaves]
  (js/document.getElementById "my-layer-id"))
 
-(println layer/MyCustomLayer)
+;; (println layer/MyCustomLayer)
+
