@@ -1,5 +1,6 @@
+(ns leaves.cities)
 ;; name	longitude	latitude
-[
+(def cities [
 ["Shanghai"	121.47	31.23]
 ["Bombay"	72.82	18.96]
 ["Karachi"	67.01	24.86]
@@ -754,4 +755,4 @@
 ["Nuremberg"	11.05	49.45]
 ["Santa Fe"	-60.69	-31.6]
 ["Joinville"	-48.84	-26.32]
-]
+])
