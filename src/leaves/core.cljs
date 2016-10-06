@@ -102,7 +102,7 @@ ahead and edit it and see reloading in action.")
         ;; center #js [51.505 -0.09]       ; London
         center #js [48.1351 11.5820]    ; Munich
         map (-> (js/L.map "map-id")
-                (.setView center 13))
+                (.setView center 5))
         ;; Custom layer is so simple so far, that it takes only one
         ;; coordinate pair:
         custom-layer (layer/MyCustomLayer. points)]
