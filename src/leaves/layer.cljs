@@ -40,7 +40,6 @@
         :onAdd
         (fn [map]
           (this-as this
-            (set! (.-x-map this) map)
             ;; Create a DOM element and put it into one of the map
             ;; panes
             (let [el (js/L.DomUtil.create "div"
