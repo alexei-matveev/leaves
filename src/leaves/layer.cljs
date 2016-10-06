@@ -52,7 +52,9 @@
                 .overlayPane
                 (.removeChild (.-x-el this)))
             (-> map
-                (.off "viewreset" (.-x-reset this) this))))
+                (.off "viewreset" (.-x-reset this) this))
+            (-> map
+                (.off "zoomend" (.-x-reset this) this))))
 
         ;; Clojurescipt converts dashes in the name to underscores:
         :x_reset
