@@ -61,11 +61,12 @@
                   (.appendChild el))
               ;; add a viewreset event listener for updating layer's
               ;; position, do the latter
-              (let [points (.-x-points this)]
+              (let [points (.-x-points this)
+                    callback #(update-xy points ll->xy)]
                 (doto map
-                  (.on "viewreset" #(update-xy points ll->xy))
-                  (.on "zoomend" #(update-xy points ll->xy)))
-                (update-xy points ll->xy)))))
+                  (.on "viewreset" callback)
+                  (.on "zoomend" callback))
+                (callback)))))
 
         :onRemove
         (fn [map]
