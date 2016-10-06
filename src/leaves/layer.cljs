@@ -51,13 +51,13 @@
                            (let [ll (clj->js p)
                                  xy (.latLngToLayerPoint map ll)]
                              [(.-x xy) (.-y xy)]))]
-              ;; It probably need  to be nested here in  order to move
-              ;; together with the tiles when dragging the map around:
               (set! (.-x-el this) el)
               ;; The id is referred to  in the react component. FIXME:
               ;; literal is a bad idea:
               (set! (.-id el) "my-layer-id")
               (js/console.log "MyCustomLayer: element created")
+              ;; It probably need  to be nested here in  order to move
+              ;; together with the tiles when dragging the map around:
               (-> map
                   .getPanes
                   .-overlayPane
