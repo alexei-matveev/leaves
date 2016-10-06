@@ -1,6 +1,14 @@
+;;
+;; See  seciton  "Custom  Layer  Example"  of  the  Leaflet  reference
+;; [1]. Note that the example in the docs recommends extending L.Class
+;; which worked  with Leaflet 0.7  but stopped working with  1.0. Note
+;; use of L.Layer.extend below.
+;;
+;; [1] http://leafletjs.com/reference.html
+;;
 (ns hello-world.layer)
 
-;; This is an ugly way to build a js class:
+;; This is an ugly way to extend a js class:
 (def MyCustomLayer
   (js/L.Layer.extend
    #js {:initialize
@@ -8,8 +16,7 @@
           ;; save position of the layer or any options from the
           ;; constructor
           (this-as this
-            (set! (.-x-latlng this) latlng)
-            this))
+            (set! (.-x-latlng this) latlng)))
 
         :onAdd
         (fn [map]
@@ -56,6 +63,6 @@
                           (.latLngToLayerPoint (.-x-latlng this)))]
               (js/L.DomUtil.setPosition (.-x-el this) pos))))}))
 
-;; map.addLayer(new MyCustomLayer(latlng));
+;; (println {:my-custom-layer MyCustomLayer})
 
-(println {:my-custom-layer MyCustomLayer})
+
