@@ -8,6 +8,23 @@
 ;;
 (ns leaves.layer)
 
+;; Update xy-coordinates of layer points in one transaction applied to
+;; a reagent atom holding  geographic coordinates.  Note that dragging
+;; the map does not (need to)  trigger coordinate update --- the whole
+;; layer  with the  nested elements  is  translated as  a whole.   But
+;; zooming in  does change  the xy  coordinates. You  may think  of xy
+;; coordinates as a  pure function of lattitude,  longitude *and* zoom
+;; level.
+(defn- update-xy
+  [points ll->xy]
+  (let [tx (fn [pts]
+             (let [ll (:ll pts)
+                   xy (for [p ll]
+                        (ll->xy p))]
+               (println {:ll ll :xy xy})
+               (assoc pts :xy xy)))]
+    (swap! points tx)))
+
 ;; This is an ugly way to extend a js class:
 (def MyCustomLayer
   (js/L.Layer.extend
@@ -26,7 +43,14 @@
             ;; create a DOM element and put it into one of the map
             ;; panes
             (let [el (js/L.DomUtil.create "div"
-                                          "my-custom-layer leaflet-zoom-hide")]
+                                          "my-custom-layer leaflet-zoom-hide")
+                  ;; We will  need a function to  transform geographic
+                  ;; coordinates into plain pixels.  The input and the
+                  ;; output are cljs 2-vectors here:
+                  ll->xy (fn [p]
+                           (let [ll (clj->js p)
+                                 xy (.latLngToLayerPoint map ll)]
+                             [(.-x xy) (.-y xy)]))]
               (set! (.-x-el this) el)
               ;; The id is referred to in the react component:
               (set! (.-id el) "my-layer-id")
@@ -37,11 +61,11 @@
                   (.appendChild el))
               ;; add a viewreset event listener for updating layer's
               ;; position, do the latter
-              (-> map
-                  (.on "viewreset" (.-x-reset this) this))
-              (-> map
-                  (.on "zoomend" (.-x-reset this) this))
-              (.x-reset this))))
+              (let [points (.-x-points this)]
+                (doto map
+                  (.on "viewreset" #(update-xy points ll->xy))
+                  (.on "zoomend" #(update-xy points ll->xy)))
+                (update-xy points ll->xy)))))
 
         :onRemove
         (fn [map]
@@ -51,28 +75,12 @@
                 .getPanes
                 .overlayPane
                 (.removeChild (.-x-el this)))
-            (-> map
-                (.off "viewreset" (.-x-reset this) this))
-            (-> map
-                (.off "zoomend" (.-x-reset this) this))))
-
-        ;; Clojurescipt converts dashes in the name to underscores:
-        :x_reset
-        (fn []
-          ;; update layer's position
-          (this-as this
-            (let [points (.-x-points this)
-                  ll (:ll @points)
-                  f (fn [p]
-                      (let [ll (clj->js p)
-                            xy (-> this
-                                   .-x-map
-                                   (.latLngToLayerPoint ll))]
-                        [(.-x xy) (.-y xy)]))
-                  xy (for [p ll]
-                       (f p))]
-              (println {:ll ll :xy xy})
-              (swap! points #(assoc % :xy xy)))))}))
+            ;; Remove all event  listeners. To be specific  we need to
+            ;; keep a reference to the callbacks we added in onAdd and
+            ;; pass them here again:
+            (doto map
+              (.off "viewreset")
+              (.off "zoomend"))))}))
 
 ;; (println {:my-custom-layer MyCustomLayer})
 
