@@ -1,6 +1,7 @@
 (ns leaves.core
   (:require [reagent.core :as r]
             [leaves.layer :as layer]
+            [leaves.cities :as cities]
             [cljsjs.react-bootstrap :as b]))
 
 ;; Enable output of println and co to the js console:
@@ -72,7 +73,9 @@ ahead and edit it and see reloading in action.")
      (for [y (range -300 300 50)]
        [svg-marker x y 20 "red"]))])
 
-(def points (r/atom {:ll [[48.1351 11.5820]
+(def points (r/atom {:ll (for [[n lon lat] cities/cities]
+                           [lat lon])
+                     #_[[48.1351 11.5820]
                           [48.1451 11.5820]
                           [51.505 -0.09]]
                      :xy nil}))
