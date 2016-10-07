@@ -83,7 +83,7 @@ ahead and edit it and see reloading in action.")
                      (for [[n lon lat] cities/cities]
                        [lat lon])
                      :xy nil}))
-(println @points)
+#_(println @points)
 
 (defn- leaves []
   ;; We will be replicating the same object in the hope to get some
@@ -113,8 +113,12 @@ ahead and edit it and see reloading in action.")
                                         :maxZoom 18})
         ;; center #js [51.505 -0.09]       ; London
         center #js [48.1351 11.5820]    ; Munich
-        map (-> (js/L.map "map-id")
-                (.setView center 6))
+        options #js {:center center
+                     :zoom 6
+                     ;; The custom layer does not handle zoom
+                     ;; animation yet. Disable altogether:
+                     :zoomAnimation false}
+        map (js/L.map "map-id" options)
         ;; Custom layer is so simple so far, that it takes only one
         ;; coordinate pair:
         custom-layer (layer/MyCustomLayer. points)]

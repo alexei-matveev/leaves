@@ -69,7 +69,12 @@
                     callback #(update-xy points ll->xy)]
                 (doto map
                   (.on "viewreset" callback)
-                  (.on "zoomend" callback))
+                  (.on "zoomend" callback)
+                  ;; "zoomanim" is fired once, with parameters such as
+                  ;; the zoom center and zoom level. The actual
+                  ;; animation should be performed with CSS3
+                  ;; transitions:
+                  #_(.on "zoomanim" #((println %))))
                 (callback)))))
 
         :onRemove
