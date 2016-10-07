@@ -1,8 +1,7 @@
 (ns leaves.core
   (:require [reagent.core :as r]
             [leaves.layer :as layer]
-            [leaves.cities :as cities]
-            [cljsjs.react-bootstrap :as b]))
+            [leaves.cities :as cities]))
 
 ;; Enable output of println and co to the js console:
 (enable-console-print!)
@@ -16,8 +15,6 @@ ahead and edit it and see reloading in action.")
 
 ;; Define your app data so that it doesn't get over-written on reload
 (defonce app-state (r/atom {:text "Hello world!"}))
-
-(def button (r/adapt-react-class (aget js/ReactBootstrap "Button")))
 
 (defn some-component []
   [:div
@@ -137,7 +134,6 @@ ahead and edit it and see reloading in action.")
    [:h2 "I am a supercomponent!"]
    [some-component]
    [timer-component]
-   [button "with text"]
    [stateful-component]])
 
 ;; Optionally touch your app-state to force rerendering depending on
