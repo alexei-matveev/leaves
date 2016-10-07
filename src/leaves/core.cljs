@@ -53,40 +53,55 @@ ahead and edit it and see reloading in action.")
     (:text @app-state)]])
 
 ;; This may be browser dependent:
-(defn- translate [x y]
+(defn- transform [x y]
   (str "translate3d(" x "px," y "px, 0px)"))
 
-(defn- svg-marker [x y d color]
+(defn- svg-marker [d color]
   (let [r (/ d 2)]
     [:div {:style {:margin 0
-                   ;; :margin-top (- r), :margin-left (- r),
-                   :transform (translate (- x r) (- y r))}}
+                   :transform (transform (- r) (- r))}}
      [:svg {:width d
             :height d
-            :id "svg-marker"
             :style {:background-color "#fff0"}}
       [:circle {:cx r, :cy r, :r r, :style {:fill color}}]]]))
 
-(defn- svg-component []
-  [:div
-   (for [x (range -300 300 50)]
-     (for [y (range -300 300 50)]
-       [svg-marker x y 20 "red"]))])
+(defn- png-marker []
+  ;; There is something important about in the CSS for
+  ;; "leaflet-marker-icon" which makes positioning work also for
+  ;; many icons. Do not omit it util it is figured out:
+  [:img {:src "img/marker-icon.png"
+         :class "leaflet-marker-icon"
+         :style {:margin-left "-12px"
+                 :margin-top "-41px"
+                 :width "25px"
+                 :height "41px"}}])
 
-(def points (r/atom {:ll (for [[n lon lat] cities/cities]
-                           [lat lon])
-                     #_[[48.1351 11.5820]
-                          [48.1451 11.5820]
-                          [51.505 -0.09]]
+(defn- translated [x y body]
+  [:div
+   {:style {:transform (transform x y)}}
+   body])
+
+(def points (r/atom {:ll #_[[48.1351 11.5820]
+                          [48.2351 11.5820]]
+                     (for [[n lon lat] cities/cities]
+                       [lat lon])
                      :xy nil}))
-(println {:atom @points})
+(println @points)
 
 (defn- leaves []
-  (let [xy (:xy @points)]
-    (println {:leaves @points})
+  ;; We will be replicating the same object in the hope to get some
+  ;; caching down the call chain:
+  (let [marker (png-marker) #_[svg-marker 16 "red"]
+        xy (:xy @points)]
     [:div
      (for [[i [x y]] (map-indexed vector xy)]
-       ^{:key i} [svg-marker x y 20 "red"])]))
+       ;; Meta  with  the  key  for  react.js  to  tell  the  elements
+       ;; apart.  Note that  annotating  the marker  with metadata  in
+       ;; prefix form does not seem to suffice:
+       (with-meta
+         (translated x y marker)
+         {:key i}))]))
+
 ;;
 ;; Leaflet component handlers:
 ;;
@@ -102,7 +117,7 @@ ahead and edit it and see reloading in action.")
         ;; center #js [51.505 -0.09]       ; London
         center #js [48.1351 11.5820]    ; Munich
         map (-> (js/L.map "map-id")
-                (.setView center 5))
+                (.setView center 6))
         ;; Custom layer is so simple so far, that it takes only one
         ;; coordinate pair:
         custom-layer (layer/MyCustomLayer. points)]

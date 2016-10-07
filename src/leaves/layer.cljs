@@ -21,7 +21,7 @@
              (let [ll (:ll pts)
                    xy (for [p ll]
                         (ll->xy p))]
-               (println {:ll ll :xy xy})
+               #_(println {:ll ll :xy xy})
                (assoc pts :xy xy)))]
     (swap! points tx)))
 
@@ -34,7 +34,7 @@
           ;; layer points.  We wil need  to update them on some events
           ;; later.
           (this-as this
-            (println {:state @points})
+            #_(println {:state @points})
             (set! (.-x-points this) points)))
 
         :onAdd
