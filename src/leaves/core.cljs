@@ -57,10 +57,24 @@ ahead and edit it and see reloading in action.")
   (let [r (/ d 2)]
     [:div {:style {:margin 0
                    :transform (transform (- r) (- r))}}
-     [:svg {:width d
-            :height d
+     [:svg {:width d, :height d
             :style {:background-color "#fff0"}}
       [:circle {:cx r, :cy r, :r r, :style {:fill color}}]]]))
+
+;; See SVG docs for the shadow effect using svg filters [1].
+;; [1] http://www.w3schools.com/graphics/svg_feoffset.asp
+(defn- svg-marker-with-shadow [d color]
+  (let [r (/ d 2)
+        w (* d 2)]
+    [:div {:style {:margin 0
+                   :transform (transform (- d) (- d))}}
+     [:svg {:width w, :height w}
+      [:defs
+       [:filter {:id "f1", :x "0", :y "0", :width "200%", :height "200%"}
+        [:feOffset {:result "offOut", :in "SourceAlpha", :dx 5, :dy 5}]
+        [:feGaussianBlur {:result "blurOut", :in "offOut", :stdDeviation 2}]
+        [:feBlend {:in "SourceGraphic", :in2 "blurOut", :mode "normal"}]]]
+      [:circle {:cx r, :cy r, :r r, :fill color, :filter "url(#f1)"}]]]))
 
 (defn- png-marker []
   ;; There is something important about in the CSS for
@@ -88,7 +102,8 @@ ahead and edit it and see reloading in action.")
 (defn- leaves []
   ;; We will be replicating the same object in the hope to get some
   ;; caching down the call chain:
-  (let [marker (png-marker) #_[svg-marker 16 "red"]
+  (let [marker #_(png-marker)
+        [svg-marker-with-shadow 16 "red"]
         xy (:xy @points)]
     [:div
      (for [[i [x y]] (map-indexed vector xy)]
@@ -103,7 +118,7 @@ ahead and edit it and see reloading in action.")
 ;; Leaflet component handlers:
 ;;
 (defn leaflet-render []
-  [:div#map-id {:style {:height "600px"}}])
+  [:div#map-id {:style {:height "800px"}}])
 
 (defn leaflet-did-mount []
   (let [tile-url "http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
