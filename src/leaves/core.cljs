@@ -99,31 +99,31 @@ ahead and edit it and see reloading in action.")
   [:div {:style {:transform (transform x y)}}
    body])
 
-(def points (r/atom {:ll #_[[48.1351 11.5820]
-                          [48.2351 11.5820]]
-                     (for [[n lon lat] cities/cities]
-                       [lat lon])
-                     :xy nil}))
+(def points (r/atom (for [[n lon lat] cities/cities]
+                      {:name n
+                       :ll [lat lon]
+                       :xy nil
+                       :flag (> 0.5 (rand 1))})))
 #_(println @points)
 
 (defn- leaves []
-  ;; We will be replicating the same object in the hope to get some
-  ;; caching down the call chain:
-  (let [marker
-        [:div
-         [svg-marker-with-shadow 16 "red"]
-         [popup-marker]]
-        #_(png-marker)
-        #_[svg-marker-with-shadow 16 "red"]
-        xy (:xy @points)]
+  (let [pts @points
+        xy (map :xy pts)
+        red [:div [svg-marker-with-shadow 16 "red"]]
+        ;; We will be replicating the same object in the hope to get
+        ;; some caching down the call chain:
+        green [:div [svg-marker-with-shadow 16 "green"]]]
     [:div
-     (for [[i [x y]] (map-indexed vector xy)]
-       ;; Meta  with  the  key  for  react.js  to  tell  the  elements
-       ;; apart.  Note that  annotating  the marker  with metadata  in
-       ;; prefix form does not seem to suffice:
-       (with-meta
-         (translated x y marker)
-         {:key i}))]))
+     (for [[i p] (map-indexed vector pts)]
+       ;; Meta with the key for react.js to tell the elements apart.
+       ;; Note that annotating the marker with metadata in prefix
+       ;; form does not seem to suffice:
+       (let [[x y] (:xy p)
+             flag (:flag p)
+             marker (if flag red green)]
+         (with-meta
+           (translated x y marker)
+           {:key i})))]))
 
 ;;
 ;; Leaflet component with handlers:

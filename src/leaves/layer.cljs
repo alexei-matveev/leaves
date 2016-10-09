@@ -18,11 +18,10 @@
 (defn- update-xy
   [points ll->xy]
   (let [tx (fn [pts]
-             (let [ll (:ll pts)
-                   xy (for [p ll]
-                        (ll->xy p))]
-               #_(println {:ll ll :xy xy})
-               (assoc pts :xy xy)))]
+             (for [p pts]
+               (let [ll (:ll p)
+                     xy (ll->xy ll)]
+                 (assoc p :xy xy))))]
     (swap! points tx)))
 
 ;; This is an ugly way to extend a js class:
