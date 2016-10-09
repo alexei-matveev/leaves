@@ -109,18 +109,18 @@ ahead and edit it and see reloading in action.")
 (defn- leaves []
   (let [pts @points
         xy (map :xy pts)
-        red [:div [svg-marker-with-shadow 16 "red"]]
         ;; We will be replicating the same object in the hope to get
         ;; some caching down the call chain:
+        red [:div [svg-marker-with-shadow 16 "red"]]
         green [:div [svg-marker-with-shadow 16 "green"]]]
     [:div
      (for [[i p] (map-indexed vector pts)]
-       ;; Meta with the key for react.js to tell the elements apart.
-       ;; Note that annotating the marker with metadata in prefix
-       ;; form does not seem to suffice:
        (let [[x y] (:xy p)
              flag (:flag p)
              marker (if flag red green)]
+         ;; Meta with the key for react.js to tell the elements apart.
+         ;; Note that annotating the marker with metadata in prefix
+         ;; form does not seem to suffice:
          (with-meta
            (translated x y marker)
            {:key i})))]))
