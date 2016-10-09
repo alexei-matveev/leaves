@@ -149,8 +149,8 @@ ahead and edit it and see reloading in action.")
                            ;; animation yet. Disable altogether:
                            :zoomAnimation false}
               map (js/L.map "map-id" options)
-              ;; Custom layer is so simple so far, that it takes only one
-              ;; coordinate pair:
+              ;; Custom layer takes an atom where plane cooridnates
+              ;; will be updated occasionally:
               custom-layer (layer/MyCustomLayer. points)]
           (doto map
             (.addLayer tile-layer)
