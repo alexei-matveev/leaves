@@ -103,7 +103,21 @@ ahead and edit it and see reloading in action.")
                       {:name n
                        :ll [lat lon]
                        :xy nil
-                       :flag (> (rand 1) 0.9)})))
+                       :flag (> (rand 1) 0.99)})))
+
+;; Flip some flags with some low probability:
+(defn- update-flags [pts]
+  (for [p pts]
+    (let [flag (:flag p)]
+      ;; Red flag (true) will flip with high probabiliy back to
+      ;; green. The green flag will flip to read with low probability:
+      (if (or (and (not flag)           ; green
+                   (< (rand 1) 0.01))
+              (and flag                 ; red
+                   (< (rand 1) 0.1)))
+        (update-in p [:flag] not)
+        p))))
+
 #_(println @points)
 
 (defn- leaves []
@@ -113,20 +127,22 @@ ahead and edit it and see reloading in action.")
         ;; some caching down the call chain:
         red [:div [svg-marker-with-shadow 16 "red"]]
         green [:div [svg-marker-with-shadow 16 "green"]]]
-    [:div
-     (for [[i p] (map-indexed vector pts)]
-       (let [[x y] (:xy p)
-             flag (:flag p)
-             name (:name p)
-             marker (if flag
-                      [:div red [popup-marker name]]
-                      green)]
-         ;; Meta with the key for react.js to tell the elements apart.
-         ;; Note that annotating the marker with metadata in prefix
-         ;; form does not seem to suffice:
-         (with-meta
-           (translated x y marker)
-           {:key i})))]))
+    (do
+      (js/setTimeout #(swap! points update-flags) 1000)
+      [:div
+       (for [[i p] (map-indexed vector pts)]
+         (let [[x y] (:xy p)
+               flag (:flag p)
+               name (:name p)
+               marker (if flag
+                        [:div red [popup-marker name]]
+                        green)]
+           ;; Meta with the key for react.js to tell the elements apart.
+           ;; Note that annotating the marker with metadata in prefix
+           ;; form does not seem to suffice:
+           (with-meta
+             (translated x y marker)
+             {:key i})))])))
 
 ;;
 ;; Leaflet component with handlers:
