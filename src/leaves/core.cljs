@@ -126,38 +126,35 @@ ahead and edit it and see reloading in action.")
          {:key i}))]))
 
 ;;
-;; Leaflet component handlers:
-;;
-(defn leaflet-render []
-  [:div#map-id {:style {:height "800px"}}])
-
-(defn leaflet-did-mount []
-  (let [tile-url "http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        attribution "Map data © <a href=\"http://openstreetmap.org\">OSM</a> contributors"
-        tile-layer (js/L.tileLayer tile-url
-                                   #js {:attribution attribution
-                                        :maxZoom 18})
-        ;; center #js [51.505 -0.09]       ; London
-        center #js [48.1351 11.5820]    ; Munich
-        options #js {:center center
-                     :zoom 6
-                     ;; The custom layer does not handle zoom
-                     ;; animation yet. Disable altogether:
-                     :zoomAnimation false}
-        map (js/L.map "map-id" options)
-        ;; Custom layer is so simple so far, that it takes only one
-        ;; coordinate pair:
-        custom-layer (layer/MyCustomLayer. points)]
-    (doto map
-      (.addLayer tile-layer)
-      (.addLayer custom-layer))))
-
-;;
-;; Leaflet component itself:
+;; Leaflet component with handlers:
 ;;
 (defn leaflet []
-  (r/create-class {:reagent-render leaflet-render
-                   :component-did-mount leaflet-did-mount}))
+  (let [tile-url "http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        attribution "Map © <a href=\"http://openstreetmap.org\">OSM</a>"
+        ;; This is Munich, London would be [51.505 -0.09]
+        center #js [48.1351 11.5820]
+        zoom 5]
+    (r/create-class
+     {:reagent-render
+      (fn []
+        [:div#map-id {:style {:height "800px"}}])
+      :component-did-mount
+      (fn []
+        (let [tile-layer (js/L.tileLayer tile-url
+                                         #js {:attribution attribution
+                                              :maxZoom 18})
+              options #js {:center center
+                           :zoom zoom
+                           ;; The custom layer does not handle zoom
+                           ;; animation yet. Disable altogether:
+                           :zoomAnimation false}
+              map (js/L.map "map-id" options)
+              ;; Custom layer is so simple so far, that it takes only one
+              ;; coordinate pair:
+              custom-layer (layer/MyCustomLayer. points)]
+          (doto map
+            (.addLayer tile-layer)
+            (.addLayer custom-layer))))})))
 
 (defn app []
   [:div
