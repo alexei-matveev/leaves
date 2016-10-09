@@ -77,9 +77,9 @@ ahead and edit it and see reloading in action.")
       [:circle {:cx r, :cy r, :r r, :fill color, :filter "url(#f1)"}]]]))
 
 (defn- popup-marker []
-  [:div.leaflet-popup
-   [:div.leaflet-popup-content-wrapper
-    [:div.leaflet-popup-content
+  [:div.leaflet-popup {:style {:display nil}}
+   [:div.leaflet-popup-content-wrapper {:style {:border-radius "4px"}}
+    [:div.leaflet-popup-content {:style {:margin "4px"}}
      "Text"]]
    #_[:div.leaflet-popup-tip-container
       [:div.leaflet-popup-tip]]])
@@ -110,7 +110,9 @@ ahead and edit it and see reloading in action.")
   ;; We will be replicating the same object in the hope to get some
   ;; caching down the call chain:
   (let [marker
-        [popup-marker]
+        [:div
+         [svg-marker-with-shadow 16 "red"]
+         [popup-marker]]
         #_(png-marker)
         #_[svg-marker-with-shadow 16 "red"]
         xy (:xy @points)]
