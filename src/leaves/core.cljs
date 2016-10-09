@@ -128,6 +128,8 @@ ahead and edit it and see reloading in action.")
         red [:div [svg-marker-with-shadow 16 "red"]]
         green [:div [svg-marker-with-shadow 16 "green"]]]
     (do
+      ;; FIXME: When re-rendered too often for reasons other than some
+      ;; falgs being updated, the rate may rise:
       (js/setTimeout #(swap! points update-flags) 1000)
       [:div
        (for [[i p] (map-indexed vector pts)]
