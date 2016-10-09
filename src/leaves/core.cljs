@@ -76,11 +76,11 @@ ahead and edit it and see reloading in action.")
         [:feBlend {:in "SourceGraphic", :in2 "blurOut", :mode "normal"}]]]
       [:circle {:cx r, :cy r, :r r, :fill color, :filter "url(#f1)"}]]]))
 
-(defn- popup-marker []
+(defn- popup-marker [text]
   [:div.leaflet-popup {:style {:display nil}}
    [:div.leaflet-popup-content-wrapper {:style {:border-radius "4px"}}
     [:div.leaflet-popup-content {:style {:margin "4px"}}
-     "Text"]]
+     text]]
    #_[:div.leaflet-popup-tip-container
       [:div.leaflet-popup-tip]]])
 
@@ -103,7 +103,7 @@ ahead and edit it and see reloading in action.")
                       {:name n
                        :ll [lat lon]
                        :xy nil
-                       :flag (> 0.5 (rand 1))})))
+                       :flag (> (rand 1) 0.9)})))
 #_(println @points)
 
 (defn- leaves []
@@ -117,7 +117,10 @@ ahead and edit it and see reloading in action.")
      (for [[i p] (map-indexed vector pts)]
        (let [[x y] (:xy p)
              flag (:flag p)
-             marker (if flag red green)]
+             name (:name p)
+             marker (if flag
+                      [:div red [popup-marker name]]
+                      green)]
          ;; Meta with the key for react.js to tell the elements apart.
          ;; Note that annotating the marker with metadata in prefix
          ;; form does not seem to suffice:
