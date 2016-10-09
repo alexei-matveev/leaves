@@ -76,6 +76,14 @@ ahead and edit it and see reloading in action.")
         [:feBlend {:in "SourceGraphic", :in2 "blurOut", :mode "normal"}]]]
       [:circle {:cx r, :cy r, :r r, :fill color, :filter "url(#f1)"}]]]))
 
+(defn- popup-marker []
+  [:div.leaflet-popup
+   [:div.leaflet-popup-content-wrapper
+    [:div.leaflet-popup-content
+     "Text"]]
+   #_[:div.leaflet-popup-tip-container
+      [:div.leaflet-popup-tip]]])
+
 (defn- png-marker []
   ;; There is something important about in the CSS for
   ;; "leaflet-marker-icon" which makes positioning work also for
@@ -88,8 +96,7 @@ ahead and edit it and see reloading in action.")
                  :height "41px"}}])
 
 (defn- translated [x y body]
-  [:div
-   {:style {:transform (transform x y)}}
+  [:div {:style {:transform (transform x y)}}
    body])
 
 (def points (r/atom {:ll #_[[48.1351 11.5820]
@@ -102,8 +109,10 @@ ahead and edit it and see reloading in action.")
 (defn- leaves []
   ;; We will be replicating the same object in the hope to get some
   ;; caching down the call chain:
-  (let [marker #_(png-marker)
-        [svg-marker-with-shadow 16 "red"]
+  (let [marker
+        [popup-marker]
+        #_(png-marker)
+        #_[svg-marker-with-shadow 16 "red"]
         xy (:xy @points)]
     [:div
      (for [[i [x y]] (map-indexed vector xy)]
