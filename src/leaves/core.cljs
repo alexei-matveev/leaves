@@ -76,8 +76,8 @@ ahead and edit it and see reloading in action.")
         xy (map :xy pts)
         ;; We will be replicating the same object in the hope to get
         ;; some caching down the call chain:
-        red [:div [m/svg-marker-with-shadow 16 "red"]]
-        green [:div [m/svg-marker-with-shadow 16 "green"]]]
+        red [:div [m/svg-leaf 32 "red"]]
+        green [:div [m/svg-leaf 32 "green"]]]
     (do
       ;; FIXME: When re-rendered too often for reasons other than some
       ;; falgs being updated, the rate may rise:
