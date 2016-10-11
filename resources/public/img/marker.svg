@@ -53,10 +53,8 @@
       </cc:Work>
     </rdf:RDF>
   </metadata>
-  <circle
+  <path
      style="fill:#b3b3b3;fill-opacity:1"
-     id="path3470"
-     cx="64"
-     cy="64"
-     r="64" />
+     d="M 128,64 A 64,64 0 0 1 64,128 64,64 0 0 1 0,64 64,64 0 0 1 64,0 64,64 0 0 1 128,64 Z"
+     id="path3470" />
 </svg>
