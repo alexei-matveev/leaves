@@ -55,14 +55,6 @@
   </metadata>
   <path
      style="fill:#b3b3b3;fill-opacity:1"
-     d="m 128,64 c 0,36 -22,64 -64,128 C 22,128 0,100 0,64 0,28 28,0 64,0 c 36,0 64,28 64,64 z"
-     id="path3470"
-     inkscape:connector-curvature="0"
-     sodipodi:nodetypes="scsss" />
-  <circle
-     style="fill:#e6e6e6;fill-opacity:1"
-     id="path3511"
-     cx="64"
-     cy="64"
-     r="24" />
+     d="M 64 0 C 28 0 0 28 0 64 C 0 100 22 128 64 192 C 106 128 128 100 128 64 C 128 28 100 0 64 0 z M 64 40 A 24 24 0 0 1 88 64 A 24 24 0 0 1 64 88 A 24 24 0 0 1 40 64 A 24 24 0 0 1 64 40 z "
+     id="path3470" />
 </svg>
