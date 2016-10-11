@@ -55,7 +55,7 @@
   </metadata>
   <path
      style="fill:#b3b3b3;fill-opacity:1"
-     d="M 128,64 C 128,100 100,192 64,192 28,192 0,100 0,64 0,28 28,0 64,0 c 36,0 64,28 64,64 z"
+     d="m 128,64 c 0,36 -22,64 -64,128 C 22,128 0,100 0,64 0,28 28,0 64,0 c 36,0 64,28 64,64 z"
      id="path3470"
      inkscape:connector-curvature="0"
      sodipodi:nodetypes="scsss" />
