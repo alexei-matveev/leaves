@@ -1,10 +1,16 @@
-# hello-world
+# Leaves
 
-FIXME: Write a one-line description of your library/project.
+Experiments combining
+[reagent](https://reagent-project.github.io/index.html) and
+[leaflet](http://leafletjs.com/).
 
 ## Overview
 
-FIXME: Write a paragraph about the library/project and highlight its goals.
+In baby steps to the reactive layer on the map.
+
+Read the [re-frame](https://github.com/Day8/re-frame) docs, even if
+you do not intend using it. It was the best intro into
+[reagent](https://reagent-project.github.io/index.html) I have read.
 
 ## Setup
 
@@ -30,10 +36,11 @@ To create a production build run:
     lein do clean, cljsbuild once min
 
 And open your browser in `resources/public/index.html`. You will not
-get live reloading, nor a REPL. 
+get live reloading, nor a REPL
 
 ## License
 
-Copyright © 2014 FIXME
+Copyright © 2014 Alexei Matveev
 
-Distributed under the Eclipse Public License either version 1.0 or (at your option) any later version.
+Distributed under the Eclipse Public License either version 1.0 or (at
+your option) any later version.
