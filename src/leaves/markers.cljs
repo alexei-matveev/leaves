@@ -37,7 +37,7 @@
           :viewBox "0 0 128 192"}
     [:defs
      [:filter {:id "f1", :x "0", :y "0", :width "200%", :height "200%"}
-      [:feOffset {:result "offOut", :in "SourceAlpha", :dx 16, :dy 16}]
+      [:feOffset {:result "offOut", :in "SourceAlpha", :dx 8, :dy 8}]
       [:feGaussianBlur {:result "blurOut", :in "offOut", :stdDeviation 8}]
       [:feBlend {:in "SourceGraphic", :in2 "blurOut", :mode "normal"}]]]
     [:path
