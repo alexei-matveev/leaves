@@ -71,31 +71,34 @@ ahead and edit it and see reloading in action.")
 
 #_(println @points)
 
+;; Render function that  returns a render function  because to install
+;; the  timer  once, as  opposed  to  ading  another ticker  on  every
+;; re-render:
 (defn- leaves []
-  (let [pts @points
-        xy (map :xy pts)
-        ;; We will be replicating the same object in the hope to get
-        ;; some caching down the call chain:
-        red [:div [m/svg-leaf 32 "red"]]
-        green [:div [m/svg-leaf 32 "green"]]]
-    (do
-      ;; FIXME: When re-rendered too often for reasons other than some
-      ;; falgs being updated, the rate may rise:
-      (js/setTimeout #(swap! points update-flags) 2000)
-      [:div
-       (for [[i p] (map-indexed vector pts)]
-         (let [[x y] (:xy p)
-               flag (:flag p)
-               name (:name p)
-               marker (if flag
-                        [:div red [m/popup-marker name]]
-                        green)]
-           ;; Meta with the key for react.js to tell the elements apart.
-           ;; Note that annotating the marker with metadata in prefix
-           ;; form does not seem to suffice:
-           (with-meta
-             (m/translated x y marker)
-             {:key i})))])))
+  ;; If you make it part of re-render, the rate will rise:
+  (js/setInterval #(swap! points update-flags) 2000)
+  ;; The actual render function. Keep the argument list the same (none
+  ;; here):
+  #(let [pts @points
+         xy (map :xy pts)
+         ;; We will be replicating the same object in the hope to get
+         ;; some caching down the react.js rabbit hole:
+         red [:div [m/svg-leaf 32 "red"]]
+         green [:div [m/svg-leaf 32 "green"]]]
+     [:div
+      (for [[i p] (map-indexed vector pts)]
+        (let [[x y] (:xy p)
+              flag (:flag p)
+              name (:name p)
+              marker (if flag
+                       [:div red [m/popup-marker name]]
+                       green)]
+          ;; Meta with the key for react.js to tell the elements apart.
+          ;; Note that annotating the marker with metadata in prefix
+          ;; form does not seem to suffice:
+          (with-meta
+            (m/translated x y marker)
+            {:key i})))]))
 
 ;;
 ;; Leaflet component with handlers:
