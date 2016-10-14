@@ -12,7 +12,7 @@
                   :exclusions [org.clojure/tools.reader]]
                  [reagent "0.6.0"]]
 
-  :plugins [[lein-figwheel "0.5.4-7"]
+  :plugins [[lein-figwheel "0.5.8"]
             [lein-cljsbuild "1.1.3" :exclusions [[org.clojure/clojure]]]]
 
   :source-paths ["src"]
@@ -94,7 +94,7 @@
 
 
   :profiles {:dev {:dependencies [[binaryage/devtools "0.7.2"]
-                                  [figwheel-sidecar "0.5.4-7"]
+                                  [figwheel-sidecar "0.5.8"]
                                   [com.cemerick/piggieback "0.2.1"]]
                    ;; need to add dev source path here to get user.clj loaded
                    :source-paths ["src" "dev"]
