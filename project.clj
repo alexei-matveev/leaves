@@ -49,7 +49,7 @@
                 :compiler {:output-to "resources/public/js/compiled/leaves.js"
                            :main leaves.core
                            :optimizations :advanced
-                           :externs ["externs.js"]
+                           :externs ["leaflet.ext.js"]
                            :pretty-print false}}]}
 
   :figwheel {;; :http-server-root "public" ;; default and assumes "resources"
