@@ -26,7 +26,7 @@
 
 ;; This is an ugly way to extend a js class:
 (def MyCustomLayer
-  (js/L.Layer.extend
+  (js/L.Layer.extend                    ; L.Class for Leaflet 0.7
    #js {:initialize
         (fn [points]
           ;; Constructor.  Save the  atom holding  coordinates of  the
