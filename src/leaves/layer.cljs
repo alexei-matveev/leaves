@@ -82,7 +82,7 @@
           (this-as this
             (-> map
                 .getPanes
-                .overlayPane
+                .-overlayPane
                 (.removeChild (.-x-el this)))
             ;; Remove all event  listeners. To be specific  we need to
             ;; keep a reference to the callbacks we added in onAdd and
