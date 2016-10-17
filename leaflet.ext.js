@@ -22,6 +22,7 @@ L.Map = function () {};
 L.Map.prototype.addLayer = function() {}
 L.Map.prototype.on = function() {}
 L.Map.prototype.off = function() {}
+L.Map.prototype.latLngToLayerPoint = function() {}
 
 /**
  * @return {L.Fake}
